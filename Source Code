@@ -1,0 +1,337 @@
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.plot.CategoryPlot;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
+
+class AgricultureDashboard extends JFrame {
+
+    private static final String[] YEARS = {
+        "2018", "2017", "2016", "2015", "2014", "2013", "2012", "2011", "2010", 
+        "2009", "2008", "2007", "2006", "2005", "2004", "2003", "2002", "2001", "2000"
+    };
+
+    private static final String[] DISTRICTS = {
+        "Gurdaspur", "Pathankot", "Amritsar", "Tarn Taran", "Kapurthala", "Jalandhar", 
+        "SBS Nagar", "Hoshiarpur", "Rupnagar", "SAS Nagar", "Ludhiana", "Ferozepur", 
+        "Fazilka", "Faridkot", "Sri Muktsar Sahib", "Moga", "Bathinda", "Mansa", 
+        "Sangrur", "Barnala", "Patiala", "Fatehgarh Sahib", "TOTAL"
+    };
+
+    private static final Map<String, Double[]> DATA = new HashMap<>();
+    static {
+        DATA.put("Gurdaspur", new Double[]{14591.0, 14441.0, 10162.0, 11116.0, 11707.0, 13111.0, 13255.0, 17539.0, 18822.0, 19240.0, 21276.0, 21062.0, 23171.0, 20406.0, 20262.0, 19515.0, 19325.0, 19240.0, 20108.0});
+        DATA.put("Pathankot", new Double[]{2708.0, 2460.0, 2170.0, 1997.0, 2264.0, 2385.0, 2188.0, null, null, null, null, null, null, null, null, null, null, null, null});
+        DATA.put("Amritsar", new Double[]{18744.0, 24183.0, 17409.0, 19080.0, 20785.0, 18058.0, 16453.0, 22424.0, 20765.0, 22456.0, 21849.0, 21658.0, 39805.0, 38444.0, 33672.0, 32375.0, 32001.0, 31077.0, 29514.0});
+        DATA.put("Tarn Taran", new Double[]{16854.0, 17878.0, 12821.0, 14344.0, 13184.0, 14994.0, 12725.0, 16622.0, 16938.0, 16978.0, 17045.0, 16563.0, null, null, null, null, null, null, null});
+        DATA.put("Kapurthala", new Double[]{13990.0, 13264.0, 11357.0, 11494.0, 10189.0, 10704.0, 10350.0, 10520.0, 11562.0, 10640.0, 9699.0, 9402.0, 10951.0, 10548.0, 10265.0, 9755.0, 9429.0, 8975.0, 8274.0});
+        DATA.put("Jalandhar", new Double[]{19311.0, 18433.0, 16660.0, 16732.0, 14922.0, 16833.0, 16065.0, 15436.0, 17230.0, 16008.0, 14782.0, 13451.0, 13365.0, 13470.0, 12580.0, 12490.0, 11245.0, 10643.0, 9913.0});
+        DATA.put("SBS Nagar", new Double[]{7347.0, 6562.0, 5744.0, 5711.0, 5178.0, 5896.0, 5426.0, 5827.0, 4973.0, 4974.0, 4587.0, 4506.0, 4717.0, 4604.0, 3954.0, 3897.0, 3844.0, 3821.0, 3241.0});
+        DATA.put("Hoshiarpur", new Double[]{13937.0, 12506.0, 11238.0, 7752.0, 7691.0, 8331.0, 7887.0, 9261.0, 9199.0, 9115.0, 8680.0, 8568.0, 10428.0, 10137.0, 9507.0, 9454.0, 8193.0, 6901.0, 5924.0});
+        DATA.put("Rupnagar", new Double[]{5065.0, 4242.0, 4260.0, 4206.0, 4194.0, 4459.0, 3531.0, 4115.0, 3848.0, 3814.0, 3202.0, 3374.0, 5055.0, 5013.0, 4704.0, 4706.0, 4614.0, 4687.0, 4309.0});
+        DATA.put("SAS Nagar", new Double[]{7549.0, 7670.0, 5519.0, 6135.0, 5596.0, 5592.0, 4760.0, 6417.0, 6067.0, 6252.0, 4942.0, 4674.0, 6305.0, 5484.0, 5440.0, 5379.0, 5431.0, 5231.0, 5200.0});
+        DATA.put("Ludhiana", new Double[]{30610.0, 30112.0, 28741.0, 29102.0, 27221.0, 30099.0, 28661.0, 28568.0, 29999.0, 29443.0, 27062.0, 26577.0, 34171.0, 33822.0, 32510.0, 31952.0, 30581.0, 29622.0, 28051.0});
+        DATA.put("Ferozepur", new Double[]{10520.0, 9414.0, 7870.0, 8989.0, 8099.0, 10220.0, 9420.0, 10194.0, 10410.0, 10205.0, 9962.0, 9384.0, 10540.0, 9785.0, 9250.0, 8867.0, 8616.0, 8470.0, 7985.0});
+        DATA.put("Fazilka", new Double[]{4203.0, 4184.0, 3692.0, 4126.0, 3731.0, 4920.0, 4230.0, 4887.0, 4660.0, 4868.0, 4724.0, 4542.0, 5007.0, 4839.0, 4721.0, 4453.0, 4319.0, 4228.0, 4135.0});
+        DATA.put("Faridkot", new Double[]{4397.0, 4174.0, 3648.0, 3718.0, 3466.0, 4287.0, 3710.0, 4124.0, 4020.0, 4012.0, 4024.0, 3917.0, 4334.0, 4095.0, 3968.0, 3906.0, 3845.0, 3822.0, 3760.0});
+        DATA.put("Sri Muktsar Sahib", new Double[]{6753.0, 6239.0, 5222.0, 6066.0, 5361.0, 7316.0, 5997.0, 6899.0, 6937.0, 6825.0, 6811.0, 6479.0, 7374.0, 7050.0, 6880.0, 6825.0, 6695.0, 6531.0, 6228.0});
+        DATA.put("Moga", new Double[]{7898.0, 7561.0, 6619.0, 7072.0, 6179.0, 7493.0, 6376.0, 7603.0, 7651.0, 7690.0, 7494.0, 7175.0, 8111.0, 7957.0, 7504.0, 7385.0, 7155.0, 7104.0, 6750.0});
+        DATA.put("Bathinda", new Double[]{9576.0, 9486.0, 8486.0, 9200.0, 8510.0, 10861.0, 9426.0, 10591.0, 10253.0, 10068.0, 9645.0, 9290.0, 10607.0, 10233.0, 9921.0, 9718.0, 9230.0, 9077.0, 8695.0});
+        DATA.put("Mansa", new Double[]{6975.0, 6614.0, 5639.0, 5950.0, 5036.0, 6768.0, 5382.0, 6410.0, 6464.0, 6378.0, 6246.0, 5865.0, 6856.0, 6657.0, 6264.0, 6141.0, 5921.0, 5826.0, 5439.0});
+        DATA.put("Sangrur", new Double[]{14425.0, 14417.0, 11902.0, 13163.0, 10883.0, 14234.0, 12250.0, 14699.0, 15277.0, 14446.0, 13792.0, 13067.0, 15389.0, 14639.0, 14054.0, 13645.0, 12855.0, 12080.0, 10894.0});
+        DATA.put("Barnala", new Double[]{5191.0, 5110.0, 4197.0, 4616.0, 3684.0, 5006.0, 4221.0, 4969.0, 5045.0, 4767.0, 4654.0, 4456.0, 4984.0, 4806.0, 4651.0, 4492.0, 4227.0, 3986.0, 3670.0});
+        DATA.put("Patiala", new Double[]{19988.0, 19636.0, 15704.0, 16298.0, 13421.0, 17497.0, 14436.0, 16762.0, 17130.0, 16944.0, 16301.0, 14919.0, 17711.0, 16491.0, 15729.0, 15432.0, 14297.0, 13762.0, 12000.0});
+        DATA.put("Fatehgarh Sahib", new Double[]{7162.0, 6668.0, 5231.0, 5777.0, 5213.0, 6335.0, 5297.0, 5978.0, 6232.0, 6021.0, 5755.0, 5586.0, 6586.0, 6185.0, 5851.0, 5685.0, 5490.0, 5292.0, 4904.0});
+        DATA.put("TOTAL", new Double[]{367425.0, 366225.0, 316233.0, 316938.0, 299642.0, 304863.0, 289589.0, 326961.0, 332055.0, 325927.0, 311429.0, 309560.0, 325713.0, 318797.0, 302669.0, 298662.0, 289133.0, 270559.0, 252702.0});
+    }
+
+    private JPanel homePanel;
+    private JPanel chartPanel;
+    private JPanel storytellingPanel;
+    private JComboBox<String> districtComboBox;
+    private JComboBox<String> chartTypeComboBox;
+    private JButton showChartButton;
+    private JButton resetButton;
+    private JButton viewDataButton;
+    private JTextArea storytellingTextArea;
+    private JTextArea viewDataTextArea;
+
+    public AgricultureDashboard() {
+        setTitle("Visualization On Agriculture");
+        setSize(1400, 800);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        initializeHomePage();
+        initializeComponents();
+
+        setLayout(new BorderLayout());
+        add(homePanel, BorderLayout.CENTER);
+    }
+
+    private void initializeHomePage() {
+        homePanel = new JPanel(new BorderLayout());
+        homePanel.setBackground(Color.WHITE);
+
+        JLabel titleLabel = new JLabel("Topic: Agriculture", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(30, 0, 30, 0));
+
+        JTextArea descriptionArea = new JTextArea("Welcome to District-wise market Productions in Punjab.\n\n" +
+            "Agricultural data visualization plays a crucial role in transforming complex datasets into comprehensible insights. In the context of the regulated markets in Punjab from 2000 to 2018, this visualization allows stakeholders to better understand market trends and agricultural patterns.\n\n" +
+            "Here, users can select a district from a dropdown menu, representing various districts across Punjab. By visualizing data in different chart types—Pie Chart, Bar Chart, Scatter Chart, Line Chart, and Area Chart—users gain diverse perspectives on the data.\n\n" +
+            "Pie Charts illustrate the proportional distribution of agricultural data for each district, making it easy to compare the relative sizes of different categories within a single year.\n\n"+
+            "Bar Charts provide a clear, comparative view of agricultural output over multiple years, helping users identify trends, fluctuations, and patterns in production levels.\n\n"+
+            "Scatter Charts offer insights into the correlation between different data points across years, revealing any significant trends or anomalies in the dataset.\n\n"+
+            "Line Charts help visualize data trends over time by connecting data points with a line, which can be useful for identifying patterns and trends more clearly.\n\n"+
+            "Area Charts depict the cumulative total of agricultural output over time, providing insights into the overall growth or decline in a district’s agricultural production.\n\n"+
+            "Click 'Start Visualization' to proceed."
+        );
+        descriptionArea.setEditable(false);
+        descriptionArea.setFont(new Font("Arial", Font.PLAIN, 16));
+        descriptionArea.setBackground(Color.WHITE);
+        descriptionArea.setLineWrap(true);
+        descriptionArea.setWrapStyleWord(true);
+        descriptionArea.setBorder(BorderFactory.createEmptyBorder(0, 30, 30, 30));
+
+        JButton startButton = new JButton("Start Visualization");
+        startButton.setFont(new Font("Arial", Font.BOLD, 18));
+        startButton.setBackground(new Color(0, 153, 76));
+        startButton.setForeground(Color.WHITE);
+        startButton.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
+        startButton.addActionListener(e -> switchToVisualization());
+
+        homePanel.add(titleLabel, BorderLayout.NORTH);
+        homePanel.add(descriptionArea, BorderLayout.CENTER);
+        homePanel.add(startButton, BorderLayout.SOUTH);
+    }
+
+    private void initializeComponents() {
+        JPanel inputPanel = new JPanel(new FlowLayout());
+        inputPanel.setBackground(Color.WHITE);
+        districtComboBox = new JComboBox<>(DISTRICTS);
+        JLabel districtLabel = new JLabel("Select District:");
+        inputPanel.add(districtLabel);
+        inputPanel.add(districtComboBox);
+
+        JLabel chartTypeLabel = new JLabel("Select Chart Type:");
+        chartTypeComboBox = new JComboBox<>(new String[]{"Pie Chart", "Bar Chart", "Scatter Chart", "Line Chart", "Area Chart"});
+        inputPanel.add(chartTypeLabel);
+        inputPanel.add(chartTypeComboBox);
+
+        showChartButton = new JButton("Show Chart");
+        showChartButton.setFont(new Font("Arial", Font.BOLD, 18));
+        showChartButton.setBackground(new Color(0, 153, 76));
+        showChartButton.setForeground(Color.WHITE);
+        showChartButton.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
+        showChartButton.addActionListener(e -> showChart());
+
+        resetButton = new JButton("Reset");
+        resetButton.setFont(new Font("Arial", Font.BOLD, 18));
+        resetButton.setBackground(new Color(255, 69, 0));
+        resetButton.setForeground(Color.WHITE);
+        resetButton.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
+        resetButton.addActionListener(e -> resetVisualization());
+
+        viewDataButton = new JButton("View Data");
+        viewDataButton.setFont(new Font("Arial", Font.BOLD, 18));
+        viewDataButton.setBackground(new Color(70, 130, 180));
+        viewDataButton.setForeground(Color.WHITE);
+        viewDataButton.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
+        viewDataButton.addActionListener(e -> viewData());
+
+        JPanel buttonPanel = new JPanel(new FlowLayout());
+        buttonPanel.setBackground(Color.WHITE);
+        buttonPanel.add(showChartButton);
+        buttonPanel.add(resetButton);
+        buttonPanel.add(viewDataButton);
+
+        chartPanel = new JPanel(new BorderLayout());
+        chartPanel.setBackground(Color.WHITE);
+
+        storytellingPanel = new JPanel(new BorderLayout());
+        storytellingTextArea = new JTextArea();
+        storytellingTextArea.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+        storytellingTextArea.setEditable(false);
+        storytellingTextArea.setBackground(Color.WHITE);
+        storytellingTextArea.setLineWrap(true);
+        storytellingTextArea.setWrapStyleWord(true);
+        storytellingPanel.setPreferredSize(new Dimension(400, 0));
+        storytellingPanel.add(new JScrollPane(storytellingTextArea), BorderLayout.CENTER);
+
+        viewDataTextArea = new JTextArea();
+        viewDataTextArea.setFont(new Font("Arial", Font.PLAIN, 14));
+        viewDataTextArea.setEditable(false);
+        viewDataTextArea.setBackground(Color.WHITE);
+        viewDataTextArea.setLineWrap(true);
+        viewDataTextArea.setWrapStyleWord(true);
+        viewDataTextArea.setVisible(false); // Initially hidden
+
+        add(inputPanel, BorderLayout.NORTH);
+        add(chartPanel, BorderLayout.CENTER);
+        add(buttonPanel, BorderLayout.SOUTH);
+        add(storytellingPanel, BorderLayout.EAST);
+        add(new JScrollPane(viewDataTextArea), BorderLayout.WEST);
+    }
+
+    private void switchToVisualization() {
+        getContentPane().removeAll();
+        initializeComponents();
+        revalidate();
+        repaint();
+    }
+
+    private void showChart() {
+        String chartType = (String) chartTypeComboBox.getSelectedItem();
+        String district = (String) districtComboBox.getSelectedItem();
+
+        switch (chartType) {
+            case "Pie Chart":
+                showPieChart(district);
+                storytellingTextArea.setText("The Pie Chart for " + district + " provides a breakdown of Market production over time. This chart makes it easy to compare different years and see where the bulk of the production occurred.\n\n" + "The Pie Chart provides a visual breakdown of agricultural data for the selected district: " + district + ". The chart represents the distribution of values across different years, helping you quickly compare proportions.\n\n" + "In a Pie Chart, each slice represents a specific year's agricultural data.It indicates that the comparision of markets in 2000 - 2018.\n\n"+"Here at some cases we have high markets where In other cases we have low markets. Overall, the Pie Chart provides a clear and visual breakdown of production across years, making it ideal for understanding the proportionate contributions of each year to the district's total output.");
+                break;
+            case "Bar Chart":
+                showBarChart(district);
+                storytellingTextArea.setText("The Bar Chart for " + district + " presents a year-by-year comparison of Market production. You can see trends over time, identifying peaks and dips in output.\n\n" + "The Bar Chart allows you to observe agricultural trends over time in the district: " + district + ". Each bar represents the total market production for a given year, making it easy to identify growth or decline.\n\n"+"This format allows you to see the changes in data from 2000 to 2018 at a glance.\n\n"+" At some cases it shows a peak in production activity, whereas in other, there is a noticeable dip in the data. Overall, the Bar Chart provides a clear and direct method for visualizing production data, offering a snapshot comparison across years. This makes it an excellent tool for both quick assessments and deeper analysis, enabling better planning and resource allocation based on historical performance.");
+                break;
+            case "Scatter Chart":
+                showScatterChart(district);
+                storytellingTextArea.setText("The Scatter Chart shows relationships between data points for " + district + ". It reveals correlations or anomalies, providing insights into outliers and trends." + "The Scatter Chart visualizes the production output across years for the district: " + district + ".The scatter plot is particularly useful for identifying patterns and trends, as well as any anomalies in the data.\n\n"+"here eaisly we cen identify the range of each year and their comparision. here there is consistent decrease in market production accross these Years.\n\n" + "Overall, the Scatter Chart provides a granular view of the year-by-year production data, offering valuable insights into both the overall trend and the specific variations that occur.");
+                break;
+            case "Line Chart":
+                showLineChart(district);
+                storytellingTextArea.setText("The Line Chart represents the markets production over the years for " + district + ". It's useful for identifying long-term trends and seasonal patterns.\n\n" + "This visualization method allows you to see how markets output has evolved over time. By connecting data points across different years, the Line Chart provides a clear view of the overall direction in which our production is moving." + "In this chart, you can observe the changes in production levels from year to year, making it easier to identify periods of growth or decline. Here we can see the upward and downward trend. Conversely, a downward trend might suggest challenges or adverse conditions affecting our output.\n\n" + "The Line Chart also helps in pinpointing specific years where significant changes occurred. These can be analyzed further to understand the factors contributing to these variations. Additionally, the chart can reveal seasonal patterns, such as higher production during certain years, which can be crucial for planning and decision-making.\n\n" + "Overall, the Line Chart offers a comprehensive view of the long-term performance of production in the district, facilitating better analysis and strategic planning.");
+                break;
+            case "Area Chart":
+                showAreaChart(district);
+                storytellingTextArea.setText("The Area Chart shows cumulative Market production for " + district + " over the years. It highlights the total output growth and the year-on-year differences.\n\n" + "This visualization method is particularly effective for illustrating how the total production output has increased or decreased over time.By filling the area beneath the line connecting data points, the Area Chart emphasizes the magnitude of production and how it accumulates over the years. This allows for an intuitive understanding of the total production volume and its progression over time.\n\n" + "The Area Chart also highlights year-on-year differences by showing the changes in the area between the lines. This visual representation makes it straightforward to identify years with significant increases or decreases in production. For instance, a substantial rise in the shaded area between years suggests a notable increase in output, while a decrease indicates a drop in production levels.\n\n" + "In the conclusion, the Area Chart provides a clear and comprehensive view of cumulative agricultural production, making it a valuable tool for analyzing overall growth and understanding yearly fluctuations.");
+                break;
+        }
+    }
+
+    private void showPieChart(String district) {
+        DefaultPieDataset dataset = new DefaultPieDataset();
+        Double[] values = DATA.get(district);
+        for (int i = 0; i < YEARS.length; i++) {
+            if (values[i] != null) {
+                dataset.setValue(YEARS[i], values[i]);
+            }
+        }
+        JFreeChart chart = ChartFactory.createPieChart("Pie Chart - " + district, dataset, true, true, false);
+        displayChart(chart);
+    }
+
+    private void showBarChart(String district) {
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        Double[] values = DATA.get(district);
+        for (int i = 0; i < YEARS.length; i++) {
+            if (values[i] != null) {
+                dataset.addValue(values[i], "Production", YEARS[i]);
+            }
+        }
+        JFreeChart chart = ChartFactory.createBarChart("Bar Chart - " + district, "Year", "Production", dataset, PlotOrientation.VERTICAL, true, true, false);
+        CategoryPlot plot = chart.getCategoryPlot();
+        BarRenderer renderer = (BarRenderer) plot.getRenderer();
+	    renderer.setSeriesPaint(0, Color.GREEN);
+        displayChart(chart);
+    }
+
+    private void showScatterChart(String district) {
+        XYSeries series = new XYSeries("Market Production");
+        Double[] values = DATA.get(district);
+        for (int i = 0; i < YEARS.length; i++) {
+            if (values[i] != null) {
+                series.add(Double.parseDouble(YEARS[i]), values[i]);
+            }
+        }
+        XYSeriesCollection dataset = new XYSeriesCollection(series);
+        JFreeChart chart = ChartFactory.createScatterPlot(
+            "Agriculture Data Scatter Chart - " + district,
+            "Year", "Amount",
+            dataset);
+  
+        ChartPanel chartPanel = new ChartPanel(chart);
+
+        displayChart(chart);
+    }
+
+    private void showLineChart(String district) {
+        XYSeries series = new XYSeries("Market Production");
+        Double[] values = DATA.get(district);
+        for (int i = 0; i < YEARS.length; i++) {
+            if (values[i] != null) {
+                series.add(Double.parseDouble(YEARS[i]), values[i]);
+            }
+        }
+        XYSeriesCollection dataset = new XYSeriesCollection(series);
+        JFreeChart chart = ChartFactory.createXYLineChart(
+            "Agriculture Data Line Chart - " + district,
+            "Year", "Amount",
+            dataset);
+        ChartPanel chartPanel = new ChartPanel(chart);
+
+        displayChart(chart);
+    }
+
+    private void showAreaChart(String district) {
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        Double[] values = DATA.get(district);
+        for (int i = 0; i < YEARS.length; i++) {
+            if (values[i] != null) {
+                dataset.addValue(values[i], "Production", YEARS[i]);
+            }
+        }
+        JFreeChart chart = ChartFactory.createAreaChart("Area Chart - " + district, "Year", "Production", dataset, PlotOrientation.VERTICAL, true, true, false);
+        displayChart(chart);
+    }
+
+    private void displayChart(JFreeChart chart) {
+        chartPanel.removeAll();
+        ChartPanel chartPanelObj = new ChartPanel(chart);
+        chartPanel.add(chartPanelObj, BorderLayout.CENTER);
+        chartPanel.validate();
+    }
+
+    private void resetVisualization() {
+        districtComboBox.setSelectedIndex(0);
+        chartTypeComboBox.setSelectedIndex(0);
+        chartPanel.removeAll();
+        chartPanel.repaint();
+        storytellingTextArea.setText("");
+        viewDataTextArea.setVisible(false);
+    }
+
+    private void viewData() {
+        String district = (String) districtComboBox.getSelectedItem();
+        Double[] values = DATA.get(district);
+
+        StringBuilder dataString = new StringBuilder("Year-wise Data for " + district + ":\n\n");
+        for (int i = 0; i < YEARS.length; i++) {
+            if (values[i] != null) {
+                dataString.append(YEARS[i]).append(": ").append(values[i]).append("\n");
+            } else {
+                dataString.append(YEARS[i]).append(": No Data\n");
+            }
+        }
+
+        viewDataTextArea.setText(dataString.toString());
+        viewDataTextArea.setVisible(true); // Show raw data in the left panel
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            AgricultureDashboard dashboard = new AgricultureDashboard();
+            dashboard.setVisible(true);
+        });
+    }
+}
